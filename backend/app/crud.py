@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from . import models, schemas
+from datetime import date
 
 def get_employees(db: Session):
     return db.query(models.Employee).all()
@@ -38,3 +39,38 @@ def delete_employee(db: Session, employee_id: int):
     db.delete(employee)
     db.commit()
     return employee
+
+#######################################################################################
+
+def mark_attendance(db: Session, employee_id: int, attendance_date: date, status: str):
+    employee = db.query(models.Employee).filter(
+        models.Employee.id == employee_id
+    ).first()
+
+    if not employee:
+        return None, "EMPLOYEE_NOT_FOUND"
+
+    existing = db.query(models.Attendance).filter(
+        models.Attendance.employee_id == employee_id,
+        models.Attendance.date == attendance_date
+    ).first()
+
+    if existing:
+        return None, "DUPLICATE"
+
+    record = models.Attendance(
+        employee_id=employee_id,
+        date=attendance_date,
+        status=status
+    )
+
+    db.add(record)
+    db.commit()
+    db.refresh(record)
+    return record, None
+
+
+def get_attendance_by_employee(db: Session, employee_id: int):
+    return db.query(models.Attendance).filter(
+        models.Attendance.employee_id == employee_id
+    ).order_by(models.Attendance.date.desc()).all()
