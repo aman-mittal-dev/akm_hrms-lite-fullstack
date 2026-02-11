@@ -13,8 +13,8 @@ const Employees = () => {
     setError("");
 
     getEmployees()
-      .then((data) => {
-        setEmployees(data);
+      .then((res) => {
+        setEmployees(res.data);
       })
       .catch(() => {
         setError("Failed to load employees");
