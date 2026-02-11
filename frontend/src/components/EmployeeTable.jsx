@@ -1,40 +1,7 @@
-// const EmployeeTable = ({ employees }) => {
-//   if (employees.length === 0) {
-//     return <p>No employees found.</p>;
-//   }
-
-//   return (
-//     <table border="1" cellPadding="8">
-//       <thead>
-//         <tr>
-//           <th>ID</th>
-//           <th>Employee ID</th>
-//           <th>Name</th>
-//           <th>Email</th>
-//           <th>Department</th>
-//         </tr>
-//       </thead>
-//       <tbody>
-//         {employees.map((emp) => (
-//           <tr key={emp.id}>
-//             <td>{emp.id}</td>
-//             <td>{emp.employee_id}</td>
-//             <td>{emp.full_name}</td>
-//             <td>{emp.email}</td>
-//             <td>{emp.department}</td>
-//           </tr>
-//         ))}
-//       </tbody>
-//     </table>
-//   );
-// };
-
-// export default EmployeeTable;
-
 import { deleteEmployee } from "../services/employeeService";
 
-const EmployeeTable = ({ employees, onDeleteSuccess }) => {
-  if (employees.length === 0) {
+const EmployeeTable = ({ employees = [], onDeleteSuccess }) => {
+  if (!Array.isArray(employees) || employees.length === 0) {
     return <p>No employees found.</p>;
   }
 
@@ -49,6 +16,7 @@ const EmployeeTable = ({ employees, onDeleteSuccess }) => {
       await deleteEmployee(id);
       onDeleteSuccess();
     } catch (error) {
+      console.error(error);
       alert("Failed to delete employee");
     }
   };

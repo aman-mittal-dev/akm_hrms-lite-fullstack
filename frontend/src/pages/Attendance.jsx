@@ -14,7 +14,17 @@ const Attendance = () => {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    getEmployees().then(setEmployees);
+    const fetchEmployees = async () => {
+      try {
+        const data = await getEmployees();
+        setEmployees(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error("Failed to load employees", err);
+        setEmployees([]);
+      }
+    };
+
+    fetchEmployees();
   }, []);
 
   const handleSubmit = async (e) => {
@@ -31,18 +41,27 @@ const Attendance = () => {
       setMessage("Attendance marked successfully");
 
       const data = await getAttendanceByEmployee(employeeId);
-      setRecords(data);
+      setRecords(Array.isArray(data) ? data : []);
     } catch (err) {
+      console.error(err);
       setMessage("Failed to mark attendance");
     }
   };
 
   const handleEmployeeChange = async (id) => {
     setEmployeeId(id);
-    if (!id) return;
+    if (!id) {
+      setRecords([]);
+      return;
+    }
 
-    const data = await getAttendanceByEmployee(id);
-    setRecords(data);
+    try {
+      const data = await getAttendanceByEmployee(id);
+      setRecords(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error(err);
+      setRecords([]);
+    }
   };
 
   return (
@@ -90,7 +109,7 @@ const Attendance = () => {
 
       {/* Records Section */}
       <div className="section">
-        {records.length > 0 && (
+        {Array.isArray(records) && records.length > 0 && (
           <>
             <h3>Attendance Records</h3>
 

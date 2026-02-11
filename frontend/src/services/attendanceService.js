@@ -7,5 +7,5 @@ export const markAttendance = async (payload) => {
 
 export const getAttendanceByEmployee = async (employeeId) => {
   const res = await api.get(`/attendance/${employeeId}`);
-  return res.data.data;
+  return res.data?.data || [];
 };
