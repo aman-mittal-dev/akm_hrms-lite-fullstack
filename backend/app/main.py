@@ -34,10 +34,7 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",          # local dev
-        "https://akmhrmsfrontend.netlify.app",  # netlify prod
-    ],
+    allow_origins=["https://akmhrmsfrontend.netlify.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
