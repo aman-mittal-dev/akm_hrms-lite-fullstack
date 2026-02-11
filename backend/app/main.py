@@ -4,6 +4,8 @@ from . import models
 from .database import Base, engine
 from .routers import employees, attendance
 from .routers.utils.response import success_response
+from fastapi.middleware.cors import CORSMiddleware
+
 
 app = FastAPI(title="HRMS Lite API")
 
@@ -29,3 +31,15 @@ async def global_exception_handler(request: Request, exc: Exception):
             "data": None
         }
     )
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
