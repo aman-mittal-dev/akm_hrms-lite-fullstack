@@ -14,7 +14,7 @@ const Employees = () => {
 
     getEmployees()
       .then((res) => {
-        setEmployees(res.data);
+        setEmployees(res);
       })
       .catch(() => {
         setError("Failed to load employees");
